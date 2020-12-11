@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>❤童程童美❤天佑城校区❤</title>
+    <link type="text/css" rel="stylesheet" href="./renxi/default.css">
+    <script type="text/javascript" src="./renxi/jquery.min.js"></script>
+    <script type="text/javascript" src="./renxi/jscex.min.js"></script>
+    <script type="text/javascript" src="./renxi/jscex-parser.js"></script>
+    <script type="text/javascript" src="./renxi/jscex-jit.js"></script>
+    <script type="text/javascript" src="./renxi/jscex-builderbase.min.js"></script>
+    <script type="text/javascript" src="./renxi/jscex-async.min.js"></script>
+    <script type="text/javascript" src="./renxi/jscex-async-powerpack.min.js"></script>
+    <script type="text/javascript" src="./renxi/functions.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./renxi/love.js" charset="utf-8"></script>
+    <style type="text/css">
+        .say{
+            font-size: 25px;
+            color: deeppink;
+        }
+    </style>
+</head>
+<body>
+<audio autoplay="autopaly">
+    <source src="renxi/renxi.mp3" type="audio/mp3"/>
+</audio>
+<div id="main">
+    <div id="wrap">
+        <div id="text">
+            <div id="code">
+                <font color="#FF0000">
+                    <span class="say">亲爱的同学们，这里是童程童美天佑城校区</span><br>
+                    <span class="say"> 岁月倏忽，2019年已然过去</span><br>
+                    <span class="say"> 这一年，我们与上万家长孩子相遇相识</span><br>
+                    <span class="say">这一年，我们与每位老朋友相守相伴</span><br>
+                    <span class="say">因为有你，我们收获荣光 </span><br>
+                    <span class="say">回首过去一年的每个荣耀时刻    我们无比欣慰</span><br>
+                    <span class="say">因为有你陪伴</span><br>
+                    <span class="say">我们见证了孩子的成长与收获</span><br>
+                    <span class="say"> 因为兴趣，所以选择</span><br>
+                    <span class="say">因为热爱，所以坚持</span><br>
+                    <span class="say"> 每一步，稳稳向前；每一次，不懈努力</span><br>
+                    <span class="say">2020，一童出发</span><br>
+                    <span class="say"> 希望有更多孩子与家长，和我们一起</span><br>
+                    <span class="say">快乐编程，闪耀成长</span><br>
+                    <span class="say">我们必将竭尽全力，为孩子提供更大舞台</span><br>
+                    <span class="say">为家长提供更多优质校区服务</span><br>
+                    <span class="say"></span><br>
+                    <span class="say"> </span><br>
+                    <span class="say"> </span>
+                </font>
+            </div>
+        </div>
+        <div id="clock-box">
+            <span><font color="#666666">童程童美天佑城校区已陪伴大家：</font></span>
+            <div id="clock"></div>
+        </div>
+        <canvas id="canvas" width="1100" height="680"></canvas>
+    </div>
+</div>
+<script>
+    (function () {
+        var canvas = $('#canvas');
+        if (!canvas[0].getContext) {
+            $("#error").show();
+            return false;
+        }
+        var width = canvas.width();
+        var height = canvas.height();
+        canvas.attr("width", width);
+        canvas.attr("height", height);
+        var opts = {
+            seed: {x: width / 2 - 20, color: "rgb(190, 26, 37)", scale: 2},
+            branch: [[535, 680, 570, 250, 500, 200, 30, 100, [[540, 500, 455, 417, 340, 400, 13, 100, [[450, 435, 434, 430, 394, 395, 2, 40]]], [550, 445, 600, 356, 680, 345, 12, 100, [[578, 400, 648, 409, 661, 426, 3, 80]]], [539, 281, 537, 248, 534, 217, 3, 40], [546, 397, 413, 247, 328, 244, 9, 80, [[427, 286, 383, 253, 371, 205, 2, 40], [498, 345, 435, 315, 395, 330, 4, 60]]], [546, 357, 608, 252, 678, 221, 6, 100, [[590, 293, 646, 277, 648, 271, 2, 80]]]]]],
+            bloom: {num: 700, width: 1080, height: 650,},
+            footer: {width: 1200, height: 5, speed: 10,}
+        };
+        var tree = new Tree(canvas[0], width, height, opts);
+        var seed = tree.seed;
+        var foot = tree.footer;
+        var hold = 1;
+        canvas.click(function (e) {
+            var offset = canvas.offset(), x, y;
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+            if (seed.hover(x, y)) {
+                hold = 0;
+                canvas.unbind("click");
+                canvas.unbind("mousemove");
+                canvas.removeClass('hand');
+            }
+        }).mousemove(function (e) {
+            var offset = canvas.offset(), x, y;
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+            canvas.toggleClass('hand', seed.hover(x, y));
+        });
+        var seedAnimate = eval(Jscex.compile("async", function () {
+            seed.draw();
+            while (hold) {
+                $await(Jscex.Async.sleep(10));
+            }
+            while (seed.canScale()) {
+                seed.scale(0.95);
+                $await(Jscex.Async.sleep(10));
+            }
+            while (seed.canMove()) {
+                seed.move(0, 2);
+                foot.draw();
+                $await(Jscex.Async.sleep(10));
+            }
+        }));
+        var growAnimate = eval(Jscex.compile("async", function () {
+            do {
+                tree.grow();
+                $await(Jscex.Async.sleep(10));
+            } while (tree.canGrow());
+        }));
+        var flowAnimate = eval(Jscex.compile("async", function () {
+            do {
+                tree.flower(2);
+                $await(Jscex.Async.sleep(10));
+            } while (tree.canFlower());
+        }));
+        var moveAnimate = eval(Jscex.compile("async", function () {
+            tree.snapshot("p1", 240, 0, 610, 680);
+            while (tree.move("p1", 500, 0)) {
+                foot.draw();
+                $await(Jscex.Async.sleep(10));
+            }
+            foot.draw();
+            tree.snapshot("p2", 500, 0, 610, 680);
+            canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
+            canvas.css("background", "#ffe");
+            $await(Jscex.Async.sleep(300));
+            canvas.css("background", "none");
+        }));
+        var jumpAnimate = eval(Jscex.compile("async", function () {
+            var ctx = tree.ctx;
+            while (true) {
+                tree.ctx.clearRect(0, 0, width, height);
+                tree.jump();
+                foot.draw();
+                $await(Jscex.Async.sleep(25));
+            }
+        }));
+        var textAnimate = eval(Jscex.compile("async", function () {
+            var together = new Date();
+            together.setFullYear(2018, (6 - 1), (1- 1));
+            together.setHours(0);
+            together.setMinutes(0);
+            together.setSeconds(0);
+            together.setMilliseconds(0);
+            $("#code").show().typewriter();
+            $("#clock-box").fadeIn(500);
+            while (true) {
+                timeElapse(together);
+                $await(Jscex.Async.sleep(1000));
+            }
+        }));
+        var runAsync = eval(Jscex.compile("async", function () {
+            $await(seedAnimate());
+            $await(growAnimate());
+            $await(flowAnimate());
+            $await(moveAnimate());
+            textAnimate().start();
+            $await(jumpAnimate());
+        }));
+        runAsync().start();
+    })();
+</script>
+</body>
+</html>
